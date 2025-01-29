@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { useTheme } from '../context/ThemeContext';
 import {SearchBar} from '../components/SearchBar';
 import {StockChart} from '../components/StockChart';
 import {StockMetrics} from '../components/StockMetrics';

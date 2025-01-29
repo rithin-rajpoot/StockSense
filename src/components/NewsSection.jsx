@@ -3,24 +3,6 @@ import { Clock } from 'lucide-react';
 
 export const NewsSection = ({ news }) => {
   const [timeFilter, setTimeFilter] = useState('all');
-  
-  // const news = [
-  //   {
-  //     title: 'Company XYZ Announces Q4 Results',
-  //     time: '2 hours ago',
-  //     source: 'Financial Times',
-  //   },
-  //   {
-  //     title: 'Market Analysis: Tech Stocks Rally',
-  //     time: '4 hours ago',
-  //     source: 'Bloomberg',
-  //   },
-  //   {
-  //     title: 'New Product Launch Impact on Stock',
-  //     time: '6 hours ago',
-  //     source: 'Reuters',
-  //   },
-  // ];
 
   const timeFilters = [
     { value: 'all', label: 'All Time' },
