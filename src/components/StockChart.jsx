@@ -29,16 +29,18 @@ export const StockChart = ({ data }) => {
           )}
         </button>
       </div>
-      <div className="w-full h-[calc(100%-2rem)] text-gray-500 dark:text-gray-400">
+      <div className="w-full flex flex-col items-center h-[calc(100%-2rem)] text-gray-500 dark:text-gray-400">
+      {/* <h2 className="text-xl text-gray-500 font-semibold">Chart will be displayed here</h2> */}
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data}>
             <CartesianGrid strokeDasharray="5 3" />
-            <XAxis dataKey="date" />
-            <YAxis />
+            <XAxis dataKey="time" />
+            <YAxis /> 
+            {/* domain={['dataMin', 'dataMax']} */}
             <Tooltip />
             <Line
               type="monotone"
-              dataKey="value"
+              dataKey="price"
               stroke="#2563eb"
               strokeWidth={2}
             />
@@ -47,12 +49,4 @@ export const StockChart = ({ data }) => {
       </div>
     </div>
   );
-  // return (
-  //   <div className="h-full">
-  //     <h2 className="text-xl font-semibold mb-4">Stock Price Chart</h2>
-  //     <div className="h-[calc(100%-2rem)]">
-
-  //     </div>
-  //   </div>
-  // );
 };

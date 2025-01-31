@@ -3,24 +3,6 @@ import { Clock } from 'lucide-react';
 
 export const NewsSection = ({ news }) => {
   const [timeFilter, setTimeFilter] = useState('all');
-  
-  // const news = [
-  //   {
-  //     title: 'Company XYZ Announces Q4 Results',
-  //     time: '2 hours ago',
-  //     source: 'Financial Times',
-  //   },
-  //   {
-  //     title: 'Market Analysis: Tech Stocks Rally',
-  //     time: '4 hours ago',
-  //     source: 'Bloomberg',
-  //   },
-  //   {
-  //     title: 'New Product Launch Impact on Stock',
-  //     time: '6 hours ago',
-  //     source: 'Reuters',
-  //   },
-  // ];
 
   const timeFilters = [
     { value: 'all', label: 'All Time' },
@@ -45,29 +27,16 @@ export const NewsSection = ({ news }) => {
           ))}
         </select>
       </div>
-      {/* <div className="space-y-4">
-        {news.map((item, index) => (
-          <div key={index} className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
-            <h3 className="font-semibold dark:text-white">{item.title} </h3>
-            <div className="flex items-center mt-2 text-sm text-gray-500 dark:text-gray-400">
-              <Clock size={14} className="mr-1" />
-              <span>{item.time}</span>
-              <span className="mx-2">•</span>
-              <span>{item.source}</span>
-            </div>
-          </div>
-        ))}
-      </div> */}
 
 <div className="space-y-4">
         {news.map((item) => (
-          <article key={item.id} className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-500">
+          <article className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-200 dark:border-gray-500">
             <h3 className="font-semibold mb-2 dark:text-white">
               <a href={item.url} target="_blank" rel="noopener noreferrer" className="hover:text-blue-500">
                 {item.title}
               </a>
             </h3>
-            <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">{item.summary}</p>
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">{item.description}</p>
             <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
               <span>{item.source}</span>
               <span>{new Date(item.publishedAt).toLocaleDateString()}</span>

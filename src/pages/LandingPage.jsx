@@ -1,78 +1,72 @@
 import React, {useEffect, useState} from 'react';
 import { useNavigate } from 'react-router-dom';
-// import { useTheme } from '../context/ThemeContext';
 import {SearchBar} from '../components/SearchBar';
 import {StockChart} from '../components/StockChart';
 import {StockMetrics} from '../components/StockMetrics';
 import {NewsSection} from '../components/NewsSection';
+import {getStockMarketPrice,getStockMarketNews} from '../Services/stockData';
 
-const dummyStockData = {
-  symbol: 'AAPL',
-  companyName: 'Apple Inc.',
-  metrics: [
-    { name: 'Market Cap', value: '$2.53T', change: 1.2 },
-    { name: 'P/E Ratio', value: '28.5', change: -0.8 },
-    { name: 'Revenue', value: '$394.3B', change: 2.5 },
-    { name: 'EPS', value: '$6.13', change: 1.7 },
-    { name: '52W High', value: '$198.23', change: undefined },
-    { name: '52W Low', value: '$124.17', change: undefined },
-    { name: 'Volume', value: '82.5M', change: 3.2 },
-    { name: 'Dividend Yield', value: '0.51%', change: -0.1 },
-    { name: 'Beta', value: '1.28', change: 0.3 }
-  ],
-  news: [
-    {
-      id: '1',
-      title: 'Apple Announces New iPhone Launch Event',
-      source: 'Tech News Daily',
-      url: '#',
-      publishedAt: '2024-03-15T10:30:00Z',
-      summary: 'Apple has scheduled its annual iPhone event for early September, where it is expected to unveil the next generation of iPhones with significant camera improvements.'
-    },
-    {
-      id: '2',
-      title: 'Q1 Earnings Beat Market Expectations',
-      source: 'Financial Times',
-      url: '#',
-      publishedAt: '2024-03-14T15:45:00Z',
-      summary: 'Apple reported strong Q1 earnings, surpassing analyst expectations with record services revenue and continued iPhone sales growth.'
-    },
-    {
-      id: '3',
-      title: 'Apple Expands AI Investment',
-      source: 'Tech Insider',
-      url: '#',
-      publishedAt: '2024-03-13T09:15:00Z',
-      summary: 'The tech giant announces major investments in artificial intelligence research and development, signaling a strong push into AI technologies.'
-    },
-    {
-      id: '4',
-      title: 'New MacBook Series in Development',
-      source: 'Mac Rumors',
-      url: '#',
-      publishedAt: '2024-03-12T14:20:00Z',
-      summary: 'Sources suggest Apple is developing a new series of MacBooks featuring next-generation chips and improved display technology.'
-    }
-  ],
-  // chartData: Array.from({ length: 30 }, (_, i) => ({
-  //   timestamp: new Date(Date.now() - (29 - i) * 24 * 60 * 60 * 1000).toISOString(),
-  //   price: 150 + Math.sin(i * 0.5) * 20 + Math.random() * 5
-  // }))
-};
+
 
 export default function LandingPage() {
 
   const navigate = useNavigate();
 
   const [stockData, setStockData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  // useEffect(() => {
-  //   setStockData(dummyStockData);
-  // },[stockData]);
+  async function getNews(query){
+    const news = await getStockMarketNews(query);
+    const data1 = news.data[0];
+    const data2 = news.data[1];
+    const newsData = [
+      {
+        title: data1.title,
+        source: data1.source.name,
+        url: data1.url,
+        description: data1.description,
+        publishedAt : data1.published_at
+      },
+      {
+        title: data2.title,
+        source: data2.source.name,
+        url: data2.url,
+        description: data2.description,
+        publishedAt : data2.published_at
+      }
+    ]
+    return newsData;
+  }
 
-  const handleSearch = (query) => {
+  async function getMetrics(query){
+    const metrics = await getStockMarketPrice(query);
+    const data = metrics.data[0];
+    const metricsData = [
+        { name: "Company Name", value: data.name },
+        { name: "Price", value: `$${data.price}` },
+        { name: "Day High", value: `$${data.day_high}` },
+        { name: "Day Low", value: `$${data.day_low}` },
+        { name: "Open Price", value:` $${data.day_open}` },
+        { name: "Previous Close", value: `$${data.previous_close_price}` },
+        { name: "Volume", value: data.volume },
+        { name: "52-Week High", value: `$${data["52_week_high"]}` },
+        { name: "52-Week Low", value: `$${data["52_week_low"]}` },
+      ]
+    return metricsData;
+  }
+
+  async function handleSearch(query) {
+    setLoading(true);
     console.log('Searching for:', query);
-    setStockData(dummyStockData);
+    const newsData = await getNews(query);
+    const metricsData = await getMetrics(query);
+    setStockData(
+      {
+        news: newsData,
+        metrics: metricsData,
+        chartData: metricsData.map(m => ({ time: "Now", price: m.value })).filter(m => !isNaN(m.price))
+      });
+      setLoading(false);
   };
 
   const handleAnalyze = () => {
@@ -88,6 +82,7 @@ export default function LandingPage() {
           {/* Left Section */}
           <div className="w-[35%] flex flex-col h-[calc(100vh-1rem)]">
             <SearchBar onSearch={handleSearch} />
+            {loading && <p className="text-blue-500">Loading...</p>}
             <div className="flex-grow mt-2 mb-2 overflow-y-auto">
               <NewsSection news={stockData?.news || []} />
             </div>
@@ -104,7 +99,6 @@ export default function LandingPage() {
           <div className="w-[65%] flex flex-col gap-2">
             <div className="h-[62vh] overflow-hidden">
               <StockChart data={stockData?.chartData || []} />
-              {/* <TradingViewWidget /> */}
             </div>
             <div className="h-[36vh]">
               <StockMetrics metrics={stockData?.metrics || []} />
