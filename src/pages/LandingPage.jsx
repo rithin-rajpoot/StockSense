@@ -22,17 +22,19 @@ export default function LandingPage() {
     const newsData = [
       {
         title: data1.title,
-        source: data1.source.name,
+        source: data1.source,
         url: data1.url,
         description: data1.description,
-        publishedAt : data1.published_at
+        publishedAt : data1.published_at,
+        image: data1.image_url
       },
       {
         title: data2.title,
-        source: data2.source.name,
+        source: data2.source,
         url: data2.url,
         description: data2.description,
-        publishedAt : data2.published_at
+        publishedAt : data2.published_at,
+        image: data2.image_url
       }
     ]
     return newsData;

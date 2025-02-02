@@ -21,7 +21,7 @@ async function getStockMarketNews(symbols)
     try {
       const response = await fetch(`https://api.stockdata.org/v1/news/all?symbols=${symbols}&filter_entities=${filterEntities}&language=en&api_token=${apiToken}`) 
       const data = await response.json();
-      // console.log(data.data[0]);
+      console.log(data.data);
       return data;
     } catch (error) {
       console.error('Error fetching stock market news:', error);
@@ -29,6 +29,5 @@ async function getStockMarketNews(symbols)
       return null;
     }
 }
-getStockMarketNews('AAPL');
 
 export {getStockMarketPrice,getStockMarketNews}

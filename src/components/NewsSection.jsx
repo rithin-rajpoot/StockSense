@@ -36,8 +36,11 @@ export const NewsSection = ({ news }) => {
                 {item.title}
               </a>
             </h3>
+            <div className='mt-2 mb-3 w-full h-52 overflow-hidden'>
+              <img className='w-full h-full object-fit rounded-lg' src={item.image} alt="" />
+            </div>
             <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">{item.description}</p>
-            <div className="flex justify-between items-center text-sm text-gray-500 dark:text-gray-400">
+            <div className="mt-3 flex justify-between items-center text-sm text-gray-400 dark:text-gray-400">
               <span>{item.source}</span>
               <span>{new Date(item.publishedAt).toLocaleDateString()}</span>
             </div>
